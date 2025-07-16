@@ -4,3 +4,215 @@
 *:after {
   box-sizing: border-box;
 }
+/* Base Styles */
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+#wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 1rem;
+}
+
+h1 {
+  color: #222;
+}
+h2{
+    color: #00bfff;
+  }
+
+
+a {
+  color: #0077cc;
+  text-decoration: none;
+}
+
+button {
+  background-color: #00bfff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #009acd;
+}
+
+/* Header Styles */
+#top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #f7f3f3;
+  padding: 10px 20px;
+}
+
+.siteName a {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #0b0b0b;
+}
+
+/* Navigation Styles */
+nav {
+  background-color: #444;
+  padding: 10px 0;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+}
+
+nav li {
+  margin: 0 10px;
+  font-size: 1.5rem;
+  color:#fff;
+  font-weight: bold;
+}
+
+nav a {
+  display: block;
+  padding: 10px 15px;
+  color: #fff;
+}
+
+nav a:hover {
+  background-color: #555;
+}
+
+/* Hero Section */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto;
+  gap: 1rem;
+  align-items: center;
+  text-align: left;
+}
+
+.hero img {
+  max-width: 100%;
+  height: auto;
+  justify-self: center;
+}
+
+.cta {
+  margin-top: 1rem;
+
+}
+
+
+.cta ul {
+  list-style: none;
+  padding: 0;
+  color: #00bfff;
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: 1.6;
+  
+}
+
+.cta button {
+  margin-top: 10px;
+}
+
+/* Section Container */
+section.upgrades,
+section.reviews {
+  padding: 1rem;
+  
+}
+
+
+/* Grid for Upgrades */
+section.upgrades {
+  display: grid;
+  grid-template-columns: repeat(2, 2fr); /* 2 columns */
+  gap: 15px;
+  border-radius: 8px;
+}
+
+/* Style Each Figure */
+section.upgrades figure {
+  background-color: #00bcd4; 
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  margin: 0;
+}
+
+section.upgrades img {
+  width: 80px; 
+  height: auto;
+}
+
+section.upgrades figcaption {
+  font-weight: bold;
+  color: #083eee; 
+  margin-top: 5px;
+  font-size: 0.9rem;
+}
+
+/* Reviews Section Styles */
+section.reviews {
+  margin-top: 1rem;
+}
+
+section.reviews ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+section.reviews li {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+/* Footer */
+footer {
+  text-align: left;
+  font-size: 0.9rem;
+  color: #888;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ddd;
+}
+
+/* Media Queries for Larger Screens */
+@media screen and (min-width: 768px) {
+  .hero {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+  }
+
+  .cta {
+    text-align: left;
+    margin-left: 2rem;
+  }
+
+  section.upgrades,
+  section.reviews {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  section.upgrades div,
+  section.reviews div {
+    width: 48%;
+  }
+}
