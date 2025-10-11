@@ -4,19 +4,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= title %></title>
-    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="/js/main.js" defer></script>
   </head>
   <body>
     <main>
-      <section class="vehicle-detail">
+      <section class="vehicle-detail-container">
         <img
           src="<%= vehicle.inv_image %>"
           alt="<%= vehicle.inv_make %> <%= vehicle.inv_model %>"
+          class="vehicle-image"
         />
-        <h2><%= vehicle.inv_make %> <%= vehicle.inv_model %></h2>
-        <p>Year: <%= vehicle.inv_year %></p>
-        <p>Price: ₦<%= vehicle.inv_price.toLocaleString() %></p>
-        <p><%= vehicle.inv_description %></p>
+        <div class="vehicle-info">
+          <h1><%= vehicle.inv_make %> <%= vehicle.inv_model %></h1>
+          <p><strong>Year:</strong> <%= vehicle.inv_year %></p>
+          <p><strong>Price:</strong> $<%= Number(vehicle.inv_price).toLocaleString() %></p>
+          <p><strong>Mileage:</strong> <%= Number(vehicle.inv_miles).toLocaleString() %> miles</p>
+          <p><strong>Color:</strong> <%= vehicle.inv_color %></p>
+          <p><strong>Description:</strong> <%= vehicle.inv_description %></p>
+        </div>
       </section>
     </main>
   </body>

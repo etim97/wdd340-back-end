@@ -1,10 +1,22 @@
 <!-- content heading -->
 <% if (title) { %>
-<h1><%= title %></h1>
-<% } else { res.redirect('/') } %> 
+  <h1><%= title %></h1>
+<% } %>
 
 <%# messages() %>
 
 <div class="inventory-grid">
-     <%- grid %>
+  <% if (vehicles && vehicles.length > 0) { %>
+    <% vehicles.forEach(function(v) { %>
+      <div class="vehicle-card">
+        <a href="/inventory/detail/<%= v.inv_id %>">
+          <img src="<%= v.inv_image %>" alt="<%= v.inv_make %> <%= v.inv_model %>" />
+          <h3><%= v.inv_make %> <%= v.inv_model %></h3>
+          <p>₦<%= v.inv_price.toLocaleString() %></p>
+        </a>
+      </div>
+    <% }) %>
+  <% } else { %>
+    <p>No vehicles found for this classification.</p>
+  <% } %>
 </div>

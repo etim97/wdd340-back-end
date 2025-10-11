@@ -1,15 +1,87 @@
-function buildDetailHTML(data) {
-  return `
-    <div class="vehicle-detail">
-      <img src="${data.inv_image}" alt="${data.inv_make} ${data.inv_model}">
-      <div class="vehicle-info">
-        <h2>${data.inv_year} ${data.inv_make} ${data.inv_model}</h2>
-        <p><strong>Price:</strong> $${data.inv_price.toLocaleString()}</p>
-        <p><strong>Mileage:</strong> ${data.inv_miles.toLocaleString()} miles</p>
-        <p>${data.inv_description}</p>
-      </div>
-    </div>
-  `
-}
+const invModel = require('../models/inventoryModel'); // adjust path if needed
 
-module.exports = { buildDetailHTML }
+const Util = {};
+
+/* ************************
+ * Build dynamic navigation
+ * ************************ */
+Util.getNav = async function (req, res, next) {
+  try {
+    const data = await invModel.getClassifications();
+    let list = "<ul>";
+    list += '<li><a href="/" title="Home page">Home</a></li>';
+    data.rows.forEach((row) => {
+      list += `<li><a href="/classification/${row.classification_name}" title="View ${row.classification_name} vehicles">${row.classification_name}</a></li>`;
+    });
+    list += "</ul>";
+    res.locals.nav = list; // store nav in res.locals for layout
+    next();
+  } catch (err) {
+    next(err);
+  }
+};
+
+/* ************************
+ * Middleware for handling errors
+ * ************************ */
+Util.handleErrors = (fn) => (req, res, next) =>
+  Promise.resolve(fn(req, res, next)).catch(next);
+
+/* ************************
+ * Build the classification grid HTML
+ * ************************ */
+Util.buildClassificationGrid = async function (data) {
+  let grid = "";
+  if (data.length > 0) {
+    grid += '<ul class="inventory-grid">';
+    data.forEach((vehicle) => {
+      grid += `
+        <li>
+          <a href="/inventory/detail/${vehicle.inv_id}">
+            <img src="${vehicle.inv_thumbnail}" alt="Image of ${vehicle.inv_make} ${vehicle.inv_model}">
+            <h2>${vehicle.inv_make} ${vehicle.inv_model}</h2>
+            <p>Price: $${vehicle.inv_price.toLocaleString()}</p>
+          </a>
+        </li>
+      `;
+    });
+    grid += "</ul>";
+  } else {
+    grid = '<p class="notice">Sorry, no matching vehicles could be found.</p>';
+  }
+  return grid;
+};
+
+/* ************************
+ * Build a single vehicle detail view
+ * ************************ */
+Util.buildVehicleDetailView = function (vehicle) {
+  const priceFormatted = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(vehicle.inv_price);
+
+  const mileageFormatted = new Intl.NumberFormat("en-US").format(
+    vehicle.inv_miles
+  );
+
+  return `
+    <section class="vehicle-detail">
+      <img src="${vehicle.inv_image}" alt="${vehicle.inv_make} ${vehicle.inv_model}" />
+      <h1>${vehicle.inv_make} ${vehicle.inv_model} (${vehicle.inv_year})</h1>
+      <p><strong>Price:</strong> ${priceFormatted}</p>
+      <p><strong>Mileage:</strong> ${mileageFormatted} miles</p>
+      <p>${vehicle.inv_description}</p>
+    </section>
+  `;
+};
+
+/* ************************
+ * Export all utils
+ * ************************ */
+module.exports = {
+  getNav: Util.getNav,
+  handleErrors: Util.handleErrors,
+  buildClassificationGrid: Util.buildClassificationGrid,
+  buildVehicleDetailView: Util.buildVehicleDetailView,
+};

@@ -181,14 +181,29 @@ section.reviews li {
   font-size: 0.95rem;
 }
 
+.vehicle-detail-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: flex-start;
+}
+.vehicle-image {
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+  flex: 1 1 300px;
+}
+.vehicle-info {
+  flex: 2 1 300px;
+}
+
 /* Footer */
 footer {
   text-align: left;
   font-size: 0.9rem;
-  color: #888;
   margin-top: 2rem;
   padding-top: 1rem;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #1a1919;
 }
 
 /* Hamburger hidden on large screens */
@@ -246,7 +261,19 @@ nav a {
   section.reviews div {
     width: 48%;
   }
+  
+  @media (max-width: 700px) {
+  .vehicle-detail-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .vehicle-image, .vehicle-info {
+    width: 100%;
+  }
 }
+}
+
+
 
 /* Mobile nav */
 @media screen and (max-width: 768px) {

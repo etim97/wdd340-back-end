@@ -1,8 +1,18 @@
-const express = require("express")
-const router = express.Router()
-const invController = require("../controllers/invController")
+ const express = require("express");
+const router = express.Router();
+const invController = require("../controllers/invController");
+
+// Route to build inventory by classification view
+router.get("/type/:classificationId", invController.buildByClassificationId);
 
 // Detail route
-router.get("/detail/:inv_id", invController.buildDetailView)
+router.get("/detail/:invId", invController.buildByInventoryId);
 
-module.exports = router
+// Intentional error route for testing
+router.get("/test/error", (req, res, next) => {
+  const err = new Error("Intentional test error");
+  err.status = 500;
+  next(err);
+});
+
+module.exports = router;

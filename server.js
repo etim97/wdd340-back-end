@@ -1,53 +1,59 @@
-/* ******************************************
- * This server.js file is the primary file of the 
- * application. It is used to control the project.
- *******************************************/
-/* ***********************
- * Require Statements
- *************************/
-const express = require("express")
-const expressLayouts = require("express-ejs-layouts")
-const env = require("dotenv").config()
-const app = express()
-const staticRoutes = require("./routes/static")
+const express = require("express");
+const expressLayouts = require("express-ejs-layouts");
+const env = require("dotenv").config();
+const app = express();
+const static = require("./routes/static");
+const utilities = require("./utilities");
 
+// View Engine and Templates
+app.set("view engine", "ejs");
+app.use(expressLayouts);
+app.set("layout", "./layouts/layout");
 
-/* *****************************
- * View Engine and Templates
- ****************************** */
+// Static files (for CSS, JS, images)
+app.use(express.static("public"));
 
+// Make navigation available globally
+app.use(utilities.getNav);
 
-app.set("view engine", "ejs")
-app.use(expressLayouts)
-app.set("layout", "./layouts/layout") // not at views root
+// Static routes
+app.use(static);
 
-/* ***********************
- * Routes
- *************************/
-app.use(staticRoutes)
+// Classification routes
+const classificationRoutes = require("./routes/classification");
+app.use("/classification", classificationRoutes);
 
+// Inventory routes (for vehicle detail)
+const inventoryRoutes = require("./routes/inventoryRoute");
+app.use("/inventory", inventoryRoutes);
 
-
-/* ***********************
- * index Routes
- *************************/
+// Home route
 app.get("/", (req, res) => {
-  res.render("index", { title: "Home" })})
+  res.render("index", { title: "Custom" });
+});
 
-/* ***********************
- * Local Server Information
- * Values from .env (environment) file
- *************************/
-const port = process.env.PORT || 3000
-const host = process.env.HOST || "localhost"
+// 404 handler (must be last)
+app.use((req, res) => {
+  res.status(404).render("errors/error", {
+    title: "404 - Page Not Found",
+    message: "Sorry, this page does not exist.",
+    nav: res.locals.nav,
+  });
+});
 
-/* ***********************
- * Log statement to confirm server operation
- *************************/
-/* ***********************
- * Log statement to confirm server operation
- *************************/
+// 500 handler (must be last)
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(err.status || 500).render("errors/error", {
+    title: "Server Error",
+    message: "Something went wrong on our side.",
+    nav: res.locals.nav,
+  });
+});
+
+// Server info
+const port = process.env.PORT || 3000;
+const host = process.env.HOST || "localhost";
 app.listen(port, host, () => {
-  console.log(`app listening on http://${host}:${port}`)
-})
-
+  console.log(`app listening on http://${host}:${port}`);
+});
