@@ -52,8 +52,10 @@ app.use((err, req, res, next) => {
 });
 
 // Server info
+
+// ✅ Server info (Render-compatible)
 const port = process.env.PORT || 3000;
-const host = process.env.HOST || "localhost";
-app.listen(port, host, () => {
-  console.log(`app listening on http://${host}:${port}`);
+
+app.listen(port, "0.0.0.0", () => {
+  console.log(`✅ App listening on port ${port}`);
 });
