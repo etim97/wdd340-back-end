@@ -4,11 +4,28 @@ const env = require("dotenv").config();
 const app = express();
 const static = require("./routes/static");
 const utilities = require("./utilities");
+const session = require('express-session')
+const flash = require('express-flash')
+const path = require("path");
+
 
 // View Engine and Templates
 app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 app.use(expressLayouts);
 app.set("layout", "./layouts/layout");
+
+// ✅ Middleware
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(utilities.getNav);
+app.use(session({
+  secret: process.env.SESSION_SECRET || "secret123",
+  resave: false,
+  saveUninitialized: true
+}));
+app.use(flash());
 
 // Static files (for CSS, JS, images)
 app.use(express.static("public"));
@@ -19,6 +36,12 @@ app.use(utilities.getNav);
 // Static routes
 app.use(static);
 
+// Home route
+app.get("/", (req, res) => {
+  res.render("index", { title: "Home" });
+});
+
+
 // Classification routes
 const classificationRoutes = require("./routes/classification");
 app.use("/classification", classificationRoutes);
@@ -27,9 +50,12 @@ app.use("/classification", classificationRoutes);
 const inventoryRoutes = require("./routes/inventoryRoute");
 app.use("/inventory", inventoryRoutes);
 
+const invRouter = require('./routes/inventoryRoute')
+app.use('/inv', invRouter)
+
 // Home route
 app.get("/", (req, res) => {
-  res.render("index", { title: "Custom" });
+  res.render("index", { title: "Home" });
 });
 
 // 404 handler (must be last)
@@ -51,11 +77,12 @@ app.use((err, req, res, next) => {
   });
 });
 
+
 // Server info
 
-// ✅ Server info (Render-compatible)
-const port = process.env.PORT || 3000;
-
-app.listen(port, "0.0.0.0", () => {
-  console.log(`✅ App listening on port ${port}`);
+// Listen on port 3000 (or another port)
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });
+

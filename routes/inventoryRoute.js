@@ -1,6 +1,7 @@
- const express = require("express");
+const express = require("express");
 const router = express.Router();
 const invController = require("../controllers/invController");
+const inventoryValidate = require('../middleware/inventoryValidate')
 
 // Route to build inventory by classification view
 router.get("/type/:classificationId", invController.buildByClassificationId);
@@ -15,4 +16,28 @@ router.get("/test/error", (req, res, next) => {
   next(err);
 });
 
-module.exports = router;
+// Management view (task 1)
+router.get('/', invController.managementView)
+
+// Add classification view (task 2)
+router.get('/add-classification', invController.buildAddClassificationView)
+router.post(
+  '/add-classification',
+  inventoryValidate.classificationRules(),     
+  inventoryValidate.checkClassificationData,   
+  invController.addClassification
+)
+
+// Add inventory view (task 3)
+router.get('/add-inventory', invController.buildAddInventoryView)
+router.post(
+  '/add-inventory',
+  inventoryValidate.inventoryRules(),         
+  inventoryValidate.checkInventoryData,        
+  invController.addInventory
+)
+
+
+
+// Error handling middleware (apply to this router)
+module.exports = router

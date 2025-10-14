@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+  <title><%= title %></title>
+</head>
+<body>
+  <h1>Add a New Classification</h1>
+
+  <% if (message && message.length) { %>
+    <div class="flash"><%= message %></div>
+  <% } %>
+
+  <% if (errors && errors.length) { %>
+    <ul class="errors">
+      <% errors.forEach(e => { %>
+        <li><%= e.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <form action="/inv/add-classification" method="post" novalidate>
+    <label for="classification_name">Classification name (no spaces or special characters):</label>
+    <input
+      name="classification_name"
+      id="classification_name"
+      type="text"
+      required
+      pattern="^[A-Za-z0-9]+$"
+      title="Only letters and numbers allowed, no spaces."
+      value="<%= classification_name ? classification_name : '' %>"
+    >
+    <button type="submit">Add Classification</button>
+  </form>
+</body>
+</html>
