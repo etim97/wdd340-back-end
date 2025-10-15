@@ -55,12 +55,16 @@ async function managementView(req, res) {
 
 // Build Add Classification View
 async function buildAddClassificationView(req, res) {
-  const message = req.flash('message');
+  const message = req.flash('message') || '';  // default to empty string
+  const errors = [];                            // default empty array
+
   res.render("inventory/add-classification", { 
     title: "Add Classification",
-    message
+    message,
+    errors
   });
 }
+
 async function addClassification(req, res) {
   try {
     // Extract the classification name from the form
@@ -97,6 +101,9 @@ async function buildAddInventoryView(req, res) {
       classificationList += `<option value="${c.classification_id}">${c.classification_name}</option>`;
     });
     classificationList += '</select>';
+    
+    const message = req.flash('message') || '';
+    const errors = [];  // default empty array
     // Render the view and pass the classifications
     res.render("inventory/add-inventory", { 
       title: "Add Inventory",
