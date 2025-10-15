@@ -21,6 +21,9 @@ Util.getNav = async function (req, res, next) {
       list += `<li><a href="/classification/${row.classification_name}" title="View ${row.classification_name} vehicles">${row.classification_name}</a></li>`;
     });
 
+    // ✅ Add "Add Vehicle" link for easier access to the form
+    list += '<li><a href="/inv/add-inventory" title="Add a new vehicle">Add Vehicle</a></li>';
+
     list += '</ul>';
 
     // Store nav in res.locals for layout templates
