@@ -87,7 +87,25 @@ async function addClassification(req, res) {
 
 
 async function buildAddInventoryView(req, res) {
-  res.render("inventory/add-inventory", { title: "Add Inventory" });
+  try {
+    // Get all classifications
+    const classifications = await invModel.getClassifications();
+
+    // Build the HTML for the dropdown
+    let classificationList = '<select name="classification_id" id="classificationList" required>';
+    classifications.forEach(c => {
+      classificationList += `<option value="${c.classification_id}">${c.classification_name}</option>`;
+    });
+    classificationList += '</select>';
+    // Render the view and pass the classifications
+    res.render("inventory/add-inventory", { 
+      title: "Add Inventory",
+      classifications
+    });
+  } catch (error) {
+    console.error("Error fetching classifications:", error);
+    res.status(500).render("errors/error", { message: "Error loading Add Inventory form" });
+  }
 }
 
 async function addInventory(req, res) {
