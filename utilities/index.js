@@ -4,22 +4,33 @@ const Util = {};
 
 /* ************************
  * Build dynamic navigation
- * ************************ */
+/* ***************************
+ * Build Navigation
+ * ************************** */
 Util.getNav = async function (req, res, next) {
   try {
     const data = await invModel.getClassifications();
-    let list = "<ul>";
+
+    // Make sure we have an array of rows
+    const classifications = data && data.rows ? data.rows : [];
+
+    let list = '<ul>';
     list += '<li><a href="/" title="Home page">Home</a></li>';
-    data.rows.forEach((row) => {
+
+    classifications.forEach((row) => {
       list += `<li><a href="/classification/${row.classification_name}" title="View ${row.classification_name} vehicles">${row.classification_name}</a></li>`;
     });
-    list += "</ul>";
-    res.locals.nav = list; // store nav in res.locals for layout
+
+    list += '</ul>';
+
+    // Store nav in res.locals for layout templates
+    res.locals.nav = list;
     next();
   } catch (err) {
     next(err);
   }
 };
+
 
 /* ************************
  * Middleware for handling errors
