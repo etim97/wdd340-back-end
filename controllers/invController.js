@@ -61,7 +61,8 @@ async function buildAddClassificationView(req, res) {
   res.render("inventory/add-classification", { 
     title: "Add Classification",
     message,
-    errors
+    errors,
+    classification_name: "", 
   });
 }
 
@@ -101,13 +102,14 @@ async function buildAddInventoryView(req, res) {
       classificationList += `<option value="${c.classification_id}">${c.classification_name}</option>`;
     });
     classificationList += '</select>';
-    
     const message = req.flash('message') || '';
     const errors = [];  // default empty array
     // Render the view and pass the classifications
     res.render("inventory/add-inventory", { 
       title: "Add Inventory",
-      classifications
+      message,
+      errors,
+      classificationList: `<select name="classification_id" id="classificationList">${classificationList}</select>`
     });
   } catch (error) {
     console.error("Error fetching classifications:", error);
