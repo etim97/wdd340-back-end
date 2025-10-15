@@ -3,11 +3,19 @@ const db = require("../database/");
 /* ***************************
  *  Get all classification data
  * ************************** */
+// models/invModel.js
+const pool = require("../database/"); // adjust path as needed
+
 async function getClassifications() {
-  return await db.query(
-    "SELECT * FROM public.classification ORDER BY classification_name"
-  );
+  try {
+    const result = await db.query("SELECT * FROM public.classification ORDER BY classification_name");
+    return result.rows; // ✅ return rows directly (not the full result)
+  } catch (err) {
+    throw err;
+  }
 }
+
+module.exports = { getClassifications };
 
 /* ***************************
  * Get all inventory items and classification_name by classification_id

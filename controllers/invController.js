@@ -113,7 +113,10 @@ async function buildAddInventoryView(req, res) {
     });
   } catch (error) {
     console.error("Error fetching classifications:", error);
-    res.status(500).render("errors/error", { message: "Error loading Add Inventory form" });
+    res.status(500).render("errors/error", { 
+      title: "Error", 
+      message: "Error loading Add Inventory form" 
+    });
   }
 }
 

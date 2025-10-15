@@ -7,8 +7,7 @@ router.get("/:type", async (req, res) => {
   const type = req.params.type;
   try {
     // Get classification id from name
-    const result = await inventoryModel.getClassifications();
-    const classifications = result.rows; // ✅ Extract the array
+    const classifications = await inventoryModel.getClassifications(); // already an array
 
     console.log("Classifications:", classifications);
 
