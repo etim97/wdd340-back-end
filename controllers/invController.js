@@ -109,7 +109,7 @@ async function buildAddInventoryView(req, res) {
       title: "Add Inventory",
       message,
       errors,
-      classificationList: `<select name="classification_id" id="classificationList">${classificationList}</select>`
+      classificationList
     });
   } catch (error) {
     console.error("Error fetching classifications:", error);
@@ -119,17 +119,22 @@ async function buildAddInventoryView(req, res) {
 
 async function addInventory(req, res) {
   try {
-    const { inv_make, inv_model, inv_description, inv_price, classification_id } = req.body;
+    const { inv_make, inv_model, inv_description, inv_price, inv_year, inv_miles, inv_color, inv_image, inv_thumbnail, classification_id } = req.body;
 
     const result = await invModel.addInventory({
+      classification_id,
       inv_make,
       inv_model,
       inv_description,
+      inv_image: inv_image || '/images/no-image-available.png',
+      inv_thumbnail: inv_thumbnail || '/images/no-image-available-tn.png',
       inv_price,
-      classification_id,
+      inv_year,
+      inv_miles,
+      inv_color
     });
 
-    if (result.rowCount === 1) {
+    if (result && result.rowCount === 1) {   // ✅ Check result is not null
       req.flash('message', `Inventory item "${inv_make} ${inv_model}" added successfully!`);
       return res.redirect('/inv');
     } else {
