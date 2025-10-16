@@ -1,0 +1,116 @@
+/* Styles for account login*/
+.form-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  background: #fff;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.auth-form label {
+  font-weight: 500;
+}
+
+.auth-form input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.auth-form button {
+  background-color: #004aad;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.auth-form button:hover {
+  background-color: #003580;
+}
+
+.message {
+  background-color: #ffe5e5;
+  color: #900;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+
+main {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+h1, h2 {
+  color: #222;
+  margin-bottom: 0.5rem;
+}
+
+.flash-message {
+  background: #f0f4ff;
+  border-left: 4px solid #4a90e2;
+  padding: 0.8rem;
+  margin-bottom: 1.2rem;
+  color: #333;
+}
+
+.account-options ul,
+.inventory-access ul {
+  list-style: none;
+  padding: 0;
+}
+
+.account-options a,
+.inventory-access a {
+  display: inline-block;
+  margin: 0.5rem 0;
+  color: #0066cc;
+  text-decoration: none;
+}
+
+.account-options a:hover,
+.inventory-access a:hover {
+  text-decoration: underline;
+}
+
+.form-grid {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: 1fr 2fr;
+  align-items: center;
+}
+
+input {
+  padding: 0.5rem;
+  border: 1px solid #bbb;
+  border-radius: 5px;
+  width: 100%;
+}
+
+button.btn-primary {
+  grid-column: 1 / -1;
+  padding: 0.7rem;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button.btn-primary:hover {
+  background-color: #357ABD;
+}

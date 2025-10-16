@@ -1,0 +1,41 @@
+<%- include("../partials/head") %>
+<%- include("../partials/header") %>
+
+<main class="update-account">
+  <h1>Update Account</h1>
+
+  <% if (message && message.length > 0) { %>
+    <p class="flash-message"><%= message %></p>
+  <% } %>
+
+  <section class="update-section">
+    <h2>Personal Information</h2>
+    <form action="/account/update/<%= account.account_id %>" method="post" class="form-grid">
+      <label for="firstname">First Name:</label>
+      <input type="text" id="firstname" name="firstname" value="<%= account.account_firstname %>" required>
+
+      <label for="lastname">Last Name:</label>
+      <input type="text" id="lastname" name="lastname" value="<%= account.account_lastname %>" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" value="<%= account.account_email %>" required>
+
+      <button type="submit" class="btn-primary">Update Info</button>
+    </form>
+  </section>
+
+  <section class="update-section">
+    <h2>Change Password</h2>
+    <form action="/account/update-password/<%= account.account_id %>" method="post" class="form-grid">
+      <label for="password">New Password:</label>
+      <input type="password" id="password" name="password" required>
+
+      <label for="confirmPassword">Confirm Password:</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+      <button type="submit" class="btn-primary">Update Password</button>
+    </form>
+  </section>
+</main>
+
+<%- include("../partials/footer") %>

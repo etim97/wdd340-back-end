@@ -1,64 +1,55 @@
 const express = require("express");
+const app = express();
 const expressLayouts = require("express-ejs-layouts");
 const env = require("dotenv").config();
-const app = express();
-const static = require("./routes/static");
 const utilities = require("./utilities");
-const session = require('express-session')
-const flash = require('express-flash')
+const session = require("express-session");
+const flash = require("express-flash");
 const path = require("path");
+const cookieParser = require("cookie-parser");
 
+const accountRoute = require("./routes/accountRoute");
+const inventoryRoute = require("./routes/inventoryRoute");
+const classificationRoutes = require("./routes/classification");
+const staticRoutes = require("./routes/static");
+const invRouter = require("./routes/inventoryRoute");
 
-// View Engine and Templates
+// View Engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(expressLayouts);
 app.set("layout", "./layouts/layout");
 
-// ✅ Middleware
+// Middleware
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(utilities.getNav);
 app.use(session({
   secret: process.env.SESSION_SECRET || "secret123",
   resave: false,
   saveUninitialized: true
 }));
 app.use(flash());
-
-// Static files (for CSS, JS, images)
-app.use(express.static("public"));
-
-// Make navigation available globally
 app.use(utilities.getNav);
 
-// Static routes
-app.use(static);
-
-// Home route
-app.get("/", (req, res) => {
-  res.render("index", { title: "Home" });
-});
-
-
-// Classification routes
-const classificationRoutes = require("./routes/classification");
+// Public routes
+app.use("/", staticRoutes);
 app.use("/classification", classificationRoutes);
+app.use("/inventory", inventoryRoute);
 
-// Inventory routes (for vehicle detail)
-const inventoryRoutes = require("./routes/inventoryRoute");
-app.use("/inventory", inventoryRoutes);
-
-const invRouter = require('./routes/inventoryRoute')
-app.use('/inv', invRouter)
+app.use("/inv", invRouter);
+app.use("/account", accountRoute); 
+// ✅ Protected routes
+//app.use("/account", utilities.checkJWTToken, accountRoute);
+//app.use("/inventory", utilities.checkJWTToken, inventoryRoute); //
 
 // Home route
 app.get("/", (req, res) => {
   res.render("index", { title: "Home" });
 });
 
-// 404 handler (must be last)
+// 404 handler
 app.use((req, res) => {
   res.status(404).render("errors/error", {
     title: "404 - Page Not Found",
@@ -67,7 +58,7 @@ app.use((req, res) => {
   });
 });
 
-// 500 handler (must be last)
+// 500 handler
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(err.status || 500).render("errors/error", {
@@ -77,11 +68,8 @@ app.use((err, req, res, next) => {
   });
 });
 
-
-// Server info
-
+// Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
-

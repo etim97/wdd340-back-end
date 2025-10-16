@@ -1,0 +1,33 @@
+<%- include("../partials/header") %>
+
+<main class="form-container">
+  <h1><%= title %></h1>
+
+  <% if (message) { %>
+    <div class="message"><%= message %></div>
+  <% } %>
+
+  <form action="/account/register" method="POST" class="auth-form">
+    <label for="firstname">First Name</label>
+    <input type="text" id="firstname" name="account_firstname" value="<%= locals.account_firstname || '' %>" required>
+
+    <label for="lastname">Last Name</label>
+    <input type="text" id="lastname" name="account_lastname" value="<%= locals.account_lastname || '' %>" required>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" name="account_email" value="<%= locals.account_email || '' %>" required>
+
+    <label for="password">Password</label>
+    <input type="password" id="password" name="account_password" required>
+
+    <p class="password-hint">
+      Password must be at least 8 characters and include one uppercase letter, one lowercase letter, and one number.
+    </p>
+
+    <button type="submit">Register</button>
+  </form>
+
+  <p>Already have an account? <a href="/account/login">Login here</a>.</p>
+</main>
+
+<%- include("../partials/footer") %>

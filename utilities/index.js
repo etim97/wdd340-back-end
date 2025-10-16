@@ -1,5 +1,5 @@
 const invModel = require('../models/inventoryModel'); // adjust path if needed
-
+const jwt = require("jsonwebtoken");
 const Util = {};
 
 /* ************************
@@ -107,6 +107,65 @@ async function buildClassificationList(classification_id = null) {
   return classificationList
 }
 
+/* ****************************************
+ * Middleware to check token validity
+ **************************************** */
+
+
+Util.checkAdmin = (req, res, next) => {
+  const token = req.cookies.jwt;
+  if (!token) return res.redirect("/account/login");
+
+  try {
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    if (decoded.account_type === "Admin" || decoded.account_type === "Employee") {
+      return next();
+    } else {
+      req.flash("message", "Access denied.");
+      return res.redirect("/account/login");
+    }
+  } catch (err) {
+    console.error("JWT error:", err);
+    res.redirect("/account/login");
+  }
+};
+
+
+Util.checkLogin = (req, res, next) => {
+  const token = req.cookies.jwt;
+  if (!token) {
+    res.locals.loggedIn = false;
+    return next();
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    res.locals.loggedIn = true;
+    res.locals.account_firstname = decoded.account_firstname;
+  } catch {
+    res.locals.loggedIn = false;
+  }
+  next();
+};
+
+
+/* ************************
+ * Middleware: Verify JWT and attach user to request
+ * ************************ */
+Util.checkJWTToken = (req, res, next) => {
+  const token = req.cookies.jwt;
+  if (!token) {
+    return res.status(401).send("Access denied. No token provided.");
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    req.user = decoded;
+    next();
+  } catch (err) {
+    res.status(400).send("Invalid token.");
+  }
+};
+
 /* ************************
  * Export all utils
  * ************************ */
@@ -116,4 +175,9 @@ module.exports = {
   buildClassificationGrid: Util.buildClassificationGrid,
   buildVehicleDetailView: Util.buildVehicleDetailView,
   buildClassificationList,
+  checkAdmin: Util.checkAdmin,
+  checkLogin: Util.checkLogin,
+  checkJWTToken: Util.checkJWTToken,
 };
+
+
